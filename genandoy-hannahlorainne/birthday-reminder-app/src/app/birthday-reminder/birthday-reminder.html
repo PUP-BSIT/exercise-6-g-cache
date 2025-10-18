@@ -1,0 +1,47 @@
+<div class="container">
+    <h2>🎂 Birthday Reminder App</h2>
+
+<form (ngSubmit)="addBirthday()">
+    <input type="text" placeholder="Full Name" [(ngModel)]="name" name="name" required>
+    <input type="date" [(ngModel)]="birthDate" name="birthDate" required>
+
+    <select [(ngModel)]="relation" name="relation" required>
+        <option value="" disabled selected>Select Relation</option>
+      <option *ngFor="let r of relations" [value]="r">{{ r }}</option>
+    </select>
+
+    <input
+      *ngIf="relation === 'Other'"
+        type="text"
+        placeholder="Enter relation"
+        [(ngModel)]="customRelation"
+        name="customRelation"
+        required
+    >
+
+    <input type="text" placeholder="Gift Idea (optional)" [(ngModel)]="giftIdea" name="giftIdea">
+
+    <label>
+        <input type="checkbox" [(ngModel)]="notify" name="notify">
+        Set reminder notification
+    </label>
+
+    <button type="submit">+ Add Birthday</button>
+    </form>
+
+<h3>🎁 Upcoming Birthdays</h3>
+
+  <div *ngIf="birthdayList.length === 0" class="empty-message">
+    No birthdays yet — add one above 🎈
+    </div>
+
+    <ul>
+    <li *ngFor="let b of birthdayList">
+        <strong>{{ b.name }}</strong>
+        <span>{{ b.relation }}</span>
+        <span>📅 {{ b.birthDate }}</span>
+      <span *ngIf="b.giftIdea">🎁 {{ b.giftIdea }}</span>
+      <span *ngIf="b.notify">🔔 Reminder ON</span>
+    </li>
+    </ul>
+</div>
