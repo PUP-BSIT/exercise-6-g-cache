@@ -1,48 +1,61 @@
 import { Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Car } from '../models/car.model';
 
 @Component({
   selector: 'app-dream-car-wishlist',
-  imports: [FormsModule, CommonModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './dream-car-wishlist.html',
   styleUrl: './dream-car-wishlist.scss'
 })
 export class DreamCarWishlist {
-  carName = signal('');
-  carBrand = signal('');
-  carYear = signal<number | null>(null);
-  carPrice = signal<number | null>(null);
-  carElectric = signal(false);
-  carGas = signal(false);
-
+  carForm: FormGroup;
   wishlist = signal<Car[]>([]);
   nextId = signal(1);
 
+  constructor(private fb: FormBuilder) {
+    this.carForm = this.fb.group({
+      carName: ['', [Validators.required, Validators.minLength(2)]],
+      carBrand: ['', [Validators.required, Validators.minLength(2)]],
+      carYear: [null, [Validators.required, Validators.min(1900), Validators.max(2030)]],
+      carPrice: [null, [Validators.required, Validators.min(1)]],
+      carElectric: [false],
+      carGas: [false]
+    });
+  }
+
   onElectricChange(): void {
-    if (this.carElectric()) {
-      this.carGas.set(false);
+    if (this.carForm.get('carElectric')?.value) {
+      this.carForm.patchValue({ carGas: false });
     }
   }
 
   onGasChange(): void {
-    if (this.carGas()) {
-      this.carElectric.set(false);
+    if (this.carForm.get('carGas')?.value) {
+      this.carForm.patchValue({ carElectric: false });
     }
   }
 
   addCar(): void {
-    if (!this.carName().trim() || !this.carBrand().trim() || !this.carYear() || this.carYear()! < 1900 || !this.carPrice() || this.carPrice()! <= 0) {
-      alert('Please fill in all fields with valid values');
+    if (this.carForm.invalid) {
+      Object.keys(this.carForm.controls).forEach(key => {
+        const control = this.carForm.get(key);
+        if (control?.invalid) {
+          control.markAsTouched();
+        }
+      });
       return;
     }
 
+    const formValue = this.carForm.value;
     const exists = this.wishlist().some((car: Car) => (
-      car.name.toLowerCase() === this.carName().trim().toLowerCase() &&
-      car.brand.toLowerCase() === this.carBrand().trim().toLowerCase() &&
-      car.year === this.carYear()!
+      car.name.toLowerCase() === formValue.carName.trim().toLowerCase() &&
+      car.brand.toLowerCase() === formValue.carBrand.trim().toLowerCase() &&
+      car.year === formValue.carYear
     ));
+
     if (exists) {
       alert('This car already exists in your wishlist.');
       return;
@@ -50,17 +63,17 @@ export class DreamCarWishlist {
 
     const newCar: Car = {
       id: this.nextId(),
-      name: this.carName().trim(),
-      brand: this.carBrand().trim(),
-      year: this.carYear()!,
-      price: this.carPrice()!,
-      electric: this.carElectric(),
-      gas: this.carGas()
+      name: formValue.carName.trim(),
+      brand: formValue.carBrand.trim(),
+      year: formValue.carYear,
+      price: formValue.carPrice,
+      electric: formValue.carElectric,
+      gas: formValue.carGas
     };
 
     this.wishlist.update(cars => [...cars, newCar]);
     this.nextId.update(id => id + 1);
-    this.clearForm();
+    this.carForm.reset();
   }
 
   removeCar(id: number): void {
@@ -68,12 +81,14 @@ export class DreamCarWishlist {
   }
 
   clearForm(): void {
-    this.carName.set('');
-    this.carBrand.set('');
-    this.carYear.set(null);
-    this.carPrice.set(null);
-    this.carElectric.set(false);
-    this.carGas.set(false);
+    this.carForm.reset({
+      carName: '',
+      carBrand: '',
+      carYear: null,
+      carPrice: null,
+      carElectric: false,
+      carGas: false
+    });
   }
 
   formatPrice(price: number): string {

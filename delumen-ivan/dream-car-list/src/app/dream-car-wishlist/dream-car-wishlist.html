@@ -1,18 +1,20 @@
-  <div class="wishlist-container">
+<div class="wishlist-container">
   <div class="form-container">
     <ng-content select="[formTitle]"></ng-content>
 
-    <form (ngSubmit)="addCar()" >
+    <form [formGroup]="carForm" (ngSubmit)="addCar()">
       <div class="form-group">
         <label for="carName">Car Name:</label>
         <input 
           type="text" 
           id="carName" 
-          name="carName" 
-          [ngModel]="carName()" 
-          (ngModelChange)="carName.set($event)" 
-          required 
+          formControlName="carName"
           placeholder="Mustang GT">
+        @if (carForm.get('carName')?.invalid && carForm.get('carName')?.touched) {
+          <div class="error-message">
+            Please enter a valid car name (minimum 2 characters)
+          </div>
+        }
       </div>
 
       <div class="form-group">
@@ -20,11 +22,13 @@
         <input 
           type="text" 
           id="carBrand" 
-          name="carBrand" 
-          [ngModel]="carBrand()" 
-          (ngModelChange)="carBrand.set($event)" 
-          required 
+          formControlName="carBrand"
           placeholder="Ford">
+        @if (carForm.get('carBrand')?.invalid && carForm.get('carBrand')?.touched) {
+          <div class="error-message">
+            Please enter a valid brand name (minimum 2 characters)
+          </div>
+        }
       </div>
 
       <div class="form-group">
@@ -32,13 +36,15 @@
         <input 
           type="number" 
           id="carYear" 
-          name="carYear" 
-          [ngModel]="carYear()" 
-          (ngModelChange)="carYear.set($event)" 
-          required 
+          formControlName="carYear"
           min="1900" 
           max="2030"
           placeholder="2001">
+        @if (carForm.get('carYear')?.invalid && carForm.get('carYear')?.touched) {
+          <div class="error-message">
+            Please enter a valid year between 1900 and 2030
+          </div>
+        }
       </div>
 
       <div class="form-group">
@@ -46,13 +52,15 @@
         <input 
           type="number" 
           id="carPrice" 
-          name="carPrice" 
-          [ngModel]="carPrice()" 
-          (ngModelChange)="carPrice.set($event)" 
-          required 
+          formControlName="carPrice"
           min="1" 
           step="1000"
           placeholder="50000">
+        @if (carForm.get('carPrice')?.invalid && carForm.get('carPrice')?.touched) {
+          <div class="error-message">
+            Please enter a valid price (minimum ₱1)
+          </div>
+        }
       </div>
 
       <div class="form-group">
@@ -62,17 +70,13 @@
             <input 
               type="checkbox" 
               id="carElectric" 
-              name="carElectric" 
-              [ngModel]="carElectric()"
-              (ngModelChange)="carElectric.set($event)"
+              formControlName="carElectric"
               (change)="onElectricChange()"> Electric </label>
           <label class="checkbox-label">
             <input 
               type="checkbox" 
               id="carGas" 
-              name="carGas" 
-              [ngModel]="carGas()"
-              (ngModelChange)="carGas.set($event)"
+              formControlName="carGas"
               (change)="onGasChange()"> Gas </label>
         </div>
       </div>

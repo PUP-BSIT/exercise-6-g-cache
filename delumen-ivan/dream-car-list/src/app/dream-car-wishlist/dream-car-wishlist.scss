@@ -209,4 +209,14 @@
   .car-details p {
     margin: 5px 0;
   }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 5px;
+  }
+
+  .form-group input.ng-invalid.ng-touched {
+    border-color: #dc3545;
+  }
 }
