@@ -1,0 +1,33 @@
+<div class="event-list">
+  <h2>List of Events</h2>
+  @if (events.length === 0) {
+    <p class="no-events">No events yet</p>
+  } @else {
+    <ul>
+      @for (event of events; track event) {
+        <li>
+          <div class="event-field">
+            <span class="event-label">Title:</span>
+            {{ event.eventName }}</div>
+          <div class="event-field">
+            <span class="event-label">Date:</span>
+            {{ event.eventDate | date:'y, MMMM d' }}</div>
+          <div class="event-field">
+            <span class="event-label">Venue:</span>
+            {{ event.eventVenue }}</div>
+          <div class="event-field">
+            <span class="event-label">Start time:</span>
+            {{ event.eventDate | date:'h:mm a' }}</div>
+          <div class="event-field">
+            <span class="event-label">Required attendees:</span>
+            <div class="attendee-list">
+              @for (attendee of event.requiredAttendee; track attendee) {
+                <div class="attendee-item">{{ attendee }}</div>
+              }
+            </div>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>
