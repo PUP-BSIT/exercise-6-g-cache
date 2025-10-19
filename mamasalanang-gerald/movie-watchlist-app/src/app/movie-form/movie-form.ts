@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 
 export type Movie = {
   id: number;
@@ -46,7 +46,7 @@ export class MovieForm {
     });
   }
 
-  private titleValidator(control: any): { [key: string]: any } | null {
+  private titleValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value || !value.trim()) {
       return { 'required': 'Title is required' };
@@ -54,7 +54,7 @@ export class MovieForm {
     return null;
   }
 
-  private directorValidator(control: any): { [key: string]: any } | null {
+  private directorValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value || !value.trim()) {
       return { 'required': 'Director is required' };
@@ -62,7 +62,7 @@ export class MovieForm {
     return null;
   }
 
-  private yearValidator(control: any): { [key: string]: any } | null {
+  private yearValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value || value < 1900 || value > 2030) {
       return { 'invalidYear': 'Year must be between 1900 and 2030' };
@@ -70,7 +70,7 @@ export class MovieForm {
     return null;
   }
 
-  private genreValidator(control: any): { [key: string]: any } | null {
+  private genreValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value || value === '') {
       return { 'required': 'Genre is required' };
