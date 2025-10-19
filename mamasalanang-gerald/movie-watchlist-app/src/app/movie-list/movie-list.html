@@ -11,34 +11,34 @@
     <div class="movies-container">
       @for (movie of movies; track trackByMovieId($index, movie)) {
         <div class="movie-card" [class.watched]="movie.watched">
-      <div class="movie-info">
-        <h3 class="movie-title">{{ movie.title }}</h3>
-        <p class="movie-director">Director: {{ movie.director }}</p>
-        <p class="movie-year">Year: {{ movie.year }}</p>
-        <p class="movie-genre">Genre: {{ movie.genre }}</p>
-        <div class="movie-status">
-          <span class="status-badge" [class.watched]="movie.watched">
-            {{ movie.watched ? 'Watched' : 'To Watch' }}
-          </span>
+          <div class="movie-info">
+            <h3 class="movie-title">{{ movie.title }}</h3>
+            <p class="movie-director">Director: {{ movie.director }}</p>
+            <p class="movie-year">Year: {{ movie.year }}</p>
+            <p class="movie-genre">Genre: {{ movie.genre }}</p>
+            <div class="movie-status">
+              <span class="status-badge" [class.watched]="movie.watched">
+                {{ movie.watched ? 'Watched' : 'To Watch' }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="movie-actions">
+            <button 
+              class="toggle-button" 
+              (click)="toggleWatched(movie)"
+              [class.watched]="movie.watched"
+            >
+              {{ movie.watched ? 'Mark as Unwatched' : 'Mark as Watched' }}
+            </button>
+            <button 
+              class="remove-button" 
+              (click)="removeMovie(movie)"
+            >
+              Remove
+            </button>
+          </div>
         </div>
-      </div>
-      
-      <div class="movie-actions">
-        <button 
-          class="toggle-button" 
-          (click)="toggleWatched(movie)"
-          [class.watched]="movie.watched"
-        >
-          {{ movie.watched ? 'Mark as Unwatched' : 'Mark as Watched' }}
-        </button>
-        <button 
-          class="remove-button" 
-          (click)="removeMovie(movie)"
-        >
-          Remove
-        </button>
-      </div>
-    </div>
       }
     </div>
   }
