@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Movie } from '../movie-form/movie-form';
 
 @Component({
@@ -8,20 +8,20 @@ import { Movie } from '../movie-form/movie-form';
   styleUrl: './movie-list.sass'
 })
 export class MovieList {
-  @Input() movies: Movie[] = [];
+  @Input() public movies: Movie[] = [];
+  @Output() public movieToggled = new EventEmitter<Movie>();
+  @Output() public movieRemoved = new EventEmitter<Movie>();
 
-  toggleWatched(movie: Movie): void {
-    movie.watched = !movie.watched;
+  public toggleWatched(movie: Movie): void {
+    const updatedMovie: Movie = { ...movie, watched: !movie.watched };
+    this.movieToggled.emit(updatedMovie);
   }
 
-  removeMovie(movie: Movie): void {
-    const index = this.movies.indexOf(movie);
-    if (index > -1) {
-      this.movies.splice(index, 1);
-    }
+  public removeMovie(movie: Movie): void {
+    this.movieRemoved.emit(movie);
   }
 
-  trackByMovieId(index: number, movie: Movie): number {
+  public trackByMovieId(index: number, movie: Movie): number {
     return movie.id;
   }
 }

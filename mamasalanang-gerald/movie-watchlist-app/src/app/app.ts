@@ -12,9 +12,19 @@ import { MovieList } from './movie-list/movie-list';
 export class App {
   protected readonly title = signal('Movie Watchlist App');
   
-  movies: Movie[] = [];
+  public movies: Movie[] = [];
 
-  onMovieAdded(movie: Movie): void {
-    this.movies.push(movie);
+  public onMovieAdded(movie: Movie): void {
+    this.movies = [...this.movies, movie];
+  }
+
+  public onMovieToggled(updatedMovie: Movie): void {
+    this.movies = this.movies.map(movie => 
+      movie.id === updatedMovie.id ? updatedMovie : movie
+    );
+  }
+
+  public onMovieRemoved(movieToRemove: Movie): void {
+    this.movies = this.movies.filter(movie => movie.id !== movieToRemove.id);
   }
 }
