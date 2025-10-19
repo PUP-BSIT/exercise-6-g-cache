@@ -1,0 +1,87 @@
+<div class="movie-form">
+  <h2>Add Movie to Watchlist</h2>
+  <form (ngSubmit)="addMovie()" #movieForm="ngForm">
+    <div class="form-group">
+      <label for="title">Movie Title *</label>
+      <input 
+        type="text" 
+        id="title" 
+        name="title" 
+        [(ngModel)]="movie.title" 
+        required 
+        placeholder="Enter movie title"
+        class="form-control"
+        [class.error]="hasError('title')"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="director">Director *</label>
+      <input 
+        type="text" 
+        id="director" 
+        name="director" 
+        [(ngModel)]="movie.director" 
+        required 
+        placeholder="Enter director name"
+        class="form-control"
+        [class.error]="hasError('director')"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="year">Release Year *</label>
+      <input 
+        type="number" 
+        id="year" 
+        name="year" 
+        [(ngModel)]="movie.year" 
+        required 
+        min="1900" 
+        max="2030"
+        class="form-control"
+        [class.error]="hasError('year')"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="genre">Genre *</label>
+      <select 
+        id="genre" 
+        name="genre" 
+        [(ngModel)]="movie.genre" 
+        class="form-control"
+        [class.error]="hasError('genre')"
+      >
+        <option value="">Select a genre</option>
+        @for (genre of genres; track genre) {
+          <option [value]="genre">{{ genre }}</option>
+        }
+      </select>
+      @if (hasError('genre')) {
+        <div class="error-message">
+          Please select a genre
+        </div>
+      }
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label class="checkbox-label">
+        <input 
+          type="checkbox" 
+          name="watched" 
+          [(ngModel)]="movie.watched"
+          class="checkbox-input"
+        >
+        <span class="checkbox-text">Already watched</span>
+      </label>
+    </div>
+
+    <button 
+      type="submit" 
+      class="add-button"
+    >
+      ADD MOVIE
+    </button>
+  </form>
+</div>
