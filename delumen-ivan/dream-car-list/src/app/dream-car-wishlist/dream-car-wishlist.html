@@ -1,0 +1,111 @@
+  <div class="wishlist-container">
+  <div class="form-container">
+    <ng-content select="[formTitle]"></ng-content>
+
+    <form (ngSubmit)="addCar()" >
+      <div class="form-group">
+        <label for="carName">Car Name:</label>
+        <input 
+          type="text" 
+          id="carName" 
+          name="carName" 
+          [ngModel]="carName()" 
+          (ngModelChange)="carName.set($event)" 
+          required 
+          placeholder="Mustang GT">
+      </div>
+
+      <div class="form-group">
+        <label for="carBrand">Brand:</label>
+        <input 
+          type="text" 
+          id="carBrand" 
+          name="carBrand" 
+          [ngModel]="carBrand()" 
+          (ngModelChange)="carBrand.set($event)" 
+          required 
+          placeholder="Ford">
+      </div>
+
+      <div class="form-group">
+        <label for="carYear">Year:</label>
+        <input 
+          type="number" 
+          id="carYear" 
+          name="carYear" 
+          [ngModel]="carYear()" 
+          (ngModelChange)="carYear.set($event)" 
+          required 
+          min="1900" 
+          max="2030"
+          placeholder="2001">
+      </div>
+
+      <div class="form-group">
+        <label for="carPrice">Price (₱):</label>
+        <input 
+          type="number" 
+          id="carPrice" 
+          name="carPrice" 
+          [ngModel]="carPrice()" 
+          (ngModelChange)="carPrice.set($event)" 
+          required 
+          min="1" 
+          step="1000"
+          placeholder="50000">
+      </div>
+
+      <div class="form-group">
+        <label>Car Type:</label>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              id="carElectric" 
+              name="carElectric" 
+              [ngModel]="carElectric()"
+              (ngModelChange)="carElectric.set($event)"
+              (change)="onElectricChange()"> Electric </label>
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              id="carGas" 
+              name="carGas" 
+              [ngModel]="carGas()"
+              (ngModelChange)="carGas.set($event)"
+              (change)="onGasChange()"> Gas </label>
+        </div>
+      </div>
+
+      <button type="submit" class="add-button">ADD CAR</button>
+    </form>
+  </div>
+
+  <div class="wishlist-display">
+    <ng-content select="[listTitle]"></ng-content>
+    
+    <div class="empty-message">
+      <ng-content select="[empty]"></ng-content>
+    </div>
+    
+    <div class="cars-grid">
+      @for (car of wishlist(); track trackByCarId($index, car)) {
+        <div class="car-card">
+          <div class="car-header">
+            <h4>{{ car.name }}</h4>
+            <button 
+              class="remove-button" 
+              (click)="removeCar(car.id)"
+              title="Remove from wishlist"> X </button>
+          </div>
+          <div class="car-details">
+            <p><strong>Brand:</strong> {{ car.brand }}</p>
+            <p><strong>Year:</strong> {{ car.year }}</p>
+            <p><strong>Price:</strong> {{ formatPrice(car.price) }}</p>
+            <p><strong>Fuel Type:</strong> {{ getFuelType(car) }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
