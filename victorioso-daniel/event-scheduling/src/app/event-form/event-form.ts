@@ -41,13 +41,22 @@ export class EventForm {
   ALL_ATTENDEES = [...DIT, ...BSIT, ...BSITL];
 
   eventForm = this.formBuilder.group({
-    eventName: ['', Validators.required],
-    eventDate: ['', Validators.required],
-    eventVenue: ['', Validators.required],
-    eventStartTime: ['', Validators.required],
+    eventName: ['', {
+      validators: [Validators.required]
+    }],
+    eventDate: ['', {
+      validators: [Validators.required]
+    }],
+    eventVenue: ['', {
+      validators: [Validators.required]
+    }],
+    eventStartTime: ['', {
+      validators: [Validators.required]
+    }],
     requiredAttendee: this.formBuilder.array(
-      ALL_ATTENDEES.map(() => this.formBuilder.control(false)),
-      Validators.required
+      this.ALL_ATTENDEES.map(() => this.formBuilder.control(false, {
+        validators: [Validators.required]
+      }))
     )
   });
 
@@ -55,33 +64,34 @@ export class EventForm {
     return this.eventForm.get('requiredAttendee') as FormArray;
   }
 
-onSubmit() {
-  if (this.eventForm.valid) {
-    const formValue = this.eventForm.value;
-    const selectedAttendees = this.ALL_ATTENDEES.filter(
-      (_, i) => formValue.requiredAttendee?.[i]
-    );
-    const [year, month, day] = (formValue.eventDate ?? '').split('-').map(Number);
-    const [hour, minute] = (formValue.eventStartTime ?? '00:00')
-        .split(':').map(Number);
-    
-    const eventDateTime = new Date(year, month - 1, day, hour, minute);
+  onSubmit() {
+    if (this.eventForm.valid) {
+      const formValue = this.eventForm.value;
+      const selectedAttendees = this.ALL_ATTENDEES.filter(
+        (_, i) => formValue.requiredAttendee?.[i]
+      );
+      const [year, month, day] = (formValue.eventDate ?? '')
+          .split('-').map(Number);
+      const [hour, minute] = (formValue.eventStartTime ?? '00:00')
+          .split(':').map(Number);
+      
+      const eventDateTime = new Date(year, month - 1, day, hour, minute);
 
-    this.eventCreated.emit({
-      eventName: formValue.eventName ?? '',
-      eventDate: eventDateTime,
-      eventVenue: formValue.eventVenue as Venue,
-      eventStartTime: formValue.eventStartTime ?? '',
-      requiredAttendee: selectedAttendees
-    });
+      this.eventCreated.emit({
+        eventName: formValue.eventName ?? '',
+        eventDate: eventDateTime,
+        eventVenue: formValue.eventVenue as Venue,
+        eventStartTime: formValue.eventStartTime ?? '',
+        requiredAttendee: selectedAttendees
+      });
 
-    this.eventForm.reset({
-      eventName: '',
-      eventDate: '',
-      eventVenue: '',
-      eventStartTime: '',
-      requiredAttendee: this.ALL_ATTENDEES.map(() => false)
-    });
+      this.eventForm.reset({
+        eventName: '',
+        eventDate: '',
+        eventVenue: '',
+        eventStartTime: '',
+        requiredAttendee: this.ALL_ATTENDEES.map(() => false)
+      });
+    }
   }
-}
 }
