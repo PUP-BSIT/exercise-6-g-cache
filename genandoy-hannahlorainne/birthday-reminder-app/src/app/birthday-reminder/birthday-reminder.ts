@@ -1,52 +1,54 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf, CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-interface BirthdayEntry {
+type BirthdayEntry = {
   name: string;
   birthDate: string;
   relation: string;
   giftIdea: string;
   notify: boolean;
-}
+};
 
 @Component({
   selector: 'app-birthday-reminder',
   standalone: true,
-  imports: [FormsModule, NgFor, NgIf, CommonModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './birthday-reminder.html',
-  styleUrl: './birthday-reminder.css'
+  styleUrls: ['./birthday-reminder.scss']
 })
 export class BirthdayReminderComponent {
-  name = '';
-  birthDate = '';
-  relation = '';
-  customRelation = ''; 
-  giftIdea = '';
-  notify = false;
+  private fb = inject(FormBuilder);
+  birthdayForm: FormGroup = this.fb.group({
+    name: ['', Validators.required],
+    birthDate: ['', Validators.required],
+    relation: ['', Validators.required],
+    customRelation: [''],
+    giftIdea: [''],
+    notify: [false]
+  });
 
-  relations: string[] = ['Friend', 'Family', 'Classmate', 'Co-worker', 'Neighbor', 'Other'];
-
+  relations = ['Friend', 'Family', 'Classmate', 'Co-worker', 'Neighbor', 'Other'];
   birthdayList: BirthdayEntry[] = [];
 
-  addBirthday() {
-    let finalRelation = this.relation === 'Other' ? this.customRelation : this.relation;
-
-    if (this.name && this.birthDate && finalRelation) {
-      this.birthdayList.push({
-        name: this.name,
-        birthDate: this.birthDate,
-        relation: finalRelation,
-        giftIdea: this.giftIdea,
-        notify: this.notify
-      });
-
-      this.name = '';
-      this.birthDate = '';
-      this.relation = '';
-      this.customRelation = '';
-      this.giftIdea = '';
-      this.notify = false;
+  addBirthday(): void {
+    if (this.birthdayForm.invalid) {
+      this.birthdayForm.markAllAsTouched();
+      return;
     }
+
+    const { name, birthDate, relation, customRelation, giftIdea, notify } = this.birthdayForm.value;
+    const finalRelation = relation === 'Other' ? customRelation : relation;
+
+    const newEntry: BirthdayEntry = {
+      name,
+      birthDate,
+      relation: finalRelation,
+      giftIdea,
+      notify
+    };
+
+    this.birthdayList = [...this.birthdayList, newEntry];
+
+    this.birthdayForm.reset();
   }
 }
