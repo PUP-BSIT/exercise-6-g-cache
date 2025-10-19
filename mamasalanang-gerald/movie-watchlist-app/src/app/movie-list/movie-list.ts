@@ -1,17 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule, NgForOf, NgIf, NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Movie } from '../movie-form/movie-form';
 
 @Component({
   selector: 'app-movie-list',
-  imports: [
-    CommonModule,
-    NgIf,
-    NgForOf,
-    NgClass
-  ],
+  standalone: true,
+  imports: [CommonModule, NgClass],
   templateUrl: './movie-list.html',
-  styleUrl: './movie-list.sass'
+  styleUrls: ['./movie-list.sass']
 })
 export class MovieList {
   @Input() public movies: Movie[] = [];

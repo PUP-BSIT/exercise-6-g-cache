@@ -11,9 +11,11 @@
         class="form-control"
         [ngClass]="{ error: hasError('title') }"
       />
-      <div *ngIf="hasError('title')" class="error-message">
-        {{ getErrorMessage('title') }}
-      </div>
+      @if (hasError('title')) {
+        <div class="error-message">
+          {{ getErrorMessage('title') }}
+        </div>
+      }
     </div>
 
     <div class="form-group">
@@ -26,9 +28,11 @@
         class="form-control"
         [ngClass]="{ error: hasError('director') }"
       />
-      <div *ngIf="hasError('director')" class="error-message">
-        {{ getErrorMessage('director') }}
-      </div>
+      @if (hasError('director')) {
+        <div class="error-message">
+          {{ getErrorMessage('director') }}
+        </div>
+      }
     </div>
 
     <div class="form-group">
@@ -42,9 +46,11 @@
         class="form-control"
         [ngClass]="{ error: hasError('year') }"
       />
-      <div *ngIf="hasError('year')" class="error-message">
-        {{ getErrorMessage('year') }}
-      </div>
+      @if (hasError('year')) {
+        <div class="error-message">
+          {{ getErrorMessage('year') }}
+        </div>
+      }
     </div>
 
     <div class="form-group">
@@ -56,34 +62,36 @@
         [ngClass]="{ error: hasError('genre') }"
       >
         <option value="">Select a genre</option>
-        <option
-          *ngFor="let genre of genres; trackBy: trackByGenre"
-          [value]="genre"
-        >
-          {{ genre }}
-        </option>
+        @for (genre of genres; track genre) {
+          <option [value]="genre">{{ genre }}</option>
+        }
       </select>
-      <div *ngIf="hasError('genre')" class="error-message">
-        {{ getErrorMessage('genre') }}
-      </div>
+      @if (hasError('genre')) {
+        <div class="error-message">
+          {{ getErrorMessage('genre') }}
+        </div>
+      }
     </div>
 
     <div class="form-group checkbox-group">
       <label class="checkbox-label">
-        <input 
-          type="checkbox" 
+        <input
+          type="checkbox"
           formControlName="watched"
           class="checkbox-input"
-        >
+        />
         <span class="checkbox-text">Already watched</span>
       </label>
     </div>
 
-    <button 
-      type="submit" 
-      class="add-button"
-    >
-      ADD MOVIE
-    </button>
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="add-button"
+        [disabled]="movieForm.invalid"
+      >
+        Add Movie
+      </button>
+    </div>
   </form>
 </div>

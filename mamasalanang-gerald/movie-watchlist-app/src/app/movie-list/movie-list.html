@@ -1,19 +1,19 @@
 <div class="movie-list">
   <h2>My Movie Watchlist</h2>
 
-  <div *ngIf="movies.length === 0" class="empty-state">
-    <p>
-      No movies in your watchlist yet. Add some movies using the form
-      above!
-    </p>
-  </div>
+  @if (movies.length === 0) {
+    <div class="empty-state">
+      <p>
+        No movies in your watchlist yet. Add some movies using the form
+        above!
+      </p>
+    </div>
+  }
 
-  <div *ngIf="movies.length > 0" class="movies-container">
-    <div
-      *ngFor="let movie of movies; trackBy: trackByMovieId"
-      class="movie-card"
-      [ngClass]="{ watched: movie.watched }"
-    >
+  @if (movies.length > 0) {
+    <div class="movies-container">
+      @for (movie of movies; track movie) {
+        <div class="movie-card" [ngClass]="{ watched: movie.watched }">
       <div class="movie-info">
         <h3 class="movie-title">{{ movie.title }}</h3>
         <p class="movie-director">Director: {{ movie.director }}</p>
@@ -40,6 +40,8 @@
           Remove
         </button>
       </div>
+          </div>
+        }
     </div>
-  </div>
+  }
 </div>

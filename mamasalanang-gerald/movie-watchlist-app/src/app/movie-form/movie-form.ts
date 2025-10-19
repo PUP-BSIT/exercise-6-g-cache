@@ -1,18 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import {
-  CommonModule,
-  NgForOf,
-  NgIf,
-  NgClass
-} from '@angular/common';
-import { 
-  FormBuilder, 
-  FormGroup, 
-  Validators, 
-  ReactiveFormsModule, 
-  AbstractControl, 
-  ValidationErrors 
-} from '@angular/forms';
+import { CommonModule, NgClass } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 
 export type Movie = {
   id: number;
@@ -38,22 +26,28 @@ export enum Genre {
 
 @Component({
   selector: 'app-movie-form',
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    NgIf,
-    NgForOf,
-    NgClass
-  ],
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, NgClass],
   templateUrl: './movie-form.html',
-  styleUrl: './movie-form.sass'
+  styleUrls: ['./movie-form.sass']
 })
 export class MovieForm {
   @Output() movieAdded = new EventEmitter<Movie>();
 
   public movieForm: FormGroup;
   public formSubmitted = false;
-  public genres: string[] = Object.values(Genre);
+  public genres: string[] = [
+    Genre.ACTION,
+    Genre.COMEDY,
+    Genre.DRAMA,
+    Genre.HORROR,
+    Genre.ROMANCE,
+    Genre.SCI_FI,
+    Genre.THRILLER,
+    Genre.ADVENTURE,
+    Genre.ANIMATION,
+    Genre.DOCUMENTARY
+  ];
 
   constructor(private formBuilder: FormBuilder) {
     this.movieForm = this.formBuilder.group({
