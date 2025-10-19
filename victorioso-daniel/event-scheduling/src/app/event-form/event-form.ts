@@ -41,13 +41,22 @@ export class EventForm {
   ALL_ATTENDEES = [...DIT, ...BSIT, ...BSITL];
 
   eventForm = this.formBuilder.group({
-    eventName: ['', Validators.required],
-    eventDate: ['', Validators.required],
-    eventVenue: ['', Validators.required],
-    eventStartTime: ['', Validators.required],
+    eventName: ['', {
+      validators: [Validators.required]
+    }],
+    eventDate: ['', {
+      validators: [Validators.required]
+    }],
+    eventVenue: ['', {
+      validators: [Validators.required]
+    }],
+    eventStartTime: ['', {
+      validators: [Validators.required]
+    }],
     requiredAttendee: this.formBuilder.array(
-      ALL_ATTENDEES.map(() => this.formBuilder.control(false)),
-      Validators.required
+      this.ALL_ATTENDEES.map(() => this.formBuilder.control(false, {
+        validators: [Validators.required]
+      }))
     )
   });
 
