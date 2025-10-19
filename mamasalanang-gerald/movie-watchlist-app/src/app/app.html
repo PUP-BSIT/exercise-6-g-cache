@@ -4,14 +4,14 @@
     <p>Keep track of your favorite movies!</p>
   </header>
 
-      <main class="app-main">
-        <app-movie-form (movieAdded)="onMovieAdded($event)"></app-movie-form>
-        <app-movie-list 
-          [movies]="movies" 
-          (movieToggled)="onMovieToggled($event)"
-          (movieRemoved)="onMovieRemoved($event)">
-        </app-movie-list>
-      </main>
-  </div>
+  <main class="app-main">
+    <app-movie-form (movieAdded)="onMovieAdded($event)"></app-movie-form>
+    <app-movie-list 
+      [movies]="movies" 
+      (movieToggled)="onMovieToggled($event)"
+      (movieRemoved)="onMovieRemoved($event)">
+    </app-movie-list>
+  </main>
+</div>
 
 <router-outlet />
