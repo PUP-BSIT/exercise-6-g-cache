@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 export type Movie = {
   id: number;
@@ -25,74 +25,102 @@ export enum Genre {
 
 @Component({
   selector: 'app-movie-form',
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './movie-form.html',
   styleUrl: './movie-form.sass'
 })
 export class MovieForm {
   @Output() movieAdded = new EventEmitter<Movie>();
 
-  movie: Movie = {
-    id: 0,
-    title: '',
-    director: '',
-    year: new Date().getFullYear(),
-    genre: '',
-    watched: false
-  };
+  public movieForm: FormGroup;
+  public formSubmitted = false;
+  public genres: string[] = Object.values(Genre);
 
-  formSubmitted = false;
+  constructor(private formBuilder: FormBuilder) {
+    this.movieForm = this.formBuilder.group({
+      title: ['', [Validators.required, this.titleValidator]],
+      director: ['', [Validators.required, this.directorValidator]],
+      year: [new Date().getFullYear(), [Validators.required, this.yearValidator]],
+      genre: ['', [Validators.required, this.genreValidator]],
+      watched: [false]
+    });
+  }
 
-  genres: string[] = Object.values(Genre);
+  private titleValidator(control: any): { [key: string]: any } | null {
+    const value = control.value;
+    if (!value || !value.trim()) {
+      return { 'required': 'Title is required' };
+    }
+    return null;
+  }
 
-  addMovie(): void {
+  private directorValidator(control: any): { [key: string]: any } | null {
+    const value = control.value;
+    if (!value || !value.trim()) {
+      return { 'required': 'Director is required' };
+    }
+    return null;
+  }
+
+  private yearValidator(control: any): { [key: string]: any } | null {
+    const value = control.value;
+    if (!value || value < 1900 || value > 2030) {
+      return { 'invalidYear': 'Year must be between 1900 and 2030' };
+    }
+    return null;
+  }
+
+  private genreValidator(control: any): { [key: string]: any } | null {
+    const value = control.value;
+    if (!value || value === '') {
+      return { 'required': 'Genre is required' };
+    }
+    return null;
+  }
+
+  public addMovie(): void {
     this.formSubmitted = true;
     
-    if (this.isFormValid()) {
-      this.movie.id = Date.now();
-      this.movieAdded.emit({ ...this.movie });
+    if (this.movieForm.valid) {
+      const movie: Movie = {
+        id: Date.now(),
+        title: this.movieForm.value.title,
+        director: this.movieForm.value.director,
+        year: this.movieForm.value.year,
+        genre: this.movieForm.value.genre,
+        watched: this.movieForm.value.watched
+      };
+      
+      this.movieAdded.emit(movie);
       this.resetForm();
     }
   }
 
-  isFormValid(): boolean {
-    return !!(
-      this.movie.title?.trim() && 
-      this.movie.director?.trim() && 
-      this.movie.genre && 
-      this.movie.genre.trim() &&
-      this.movie.year &&
-      this.movie.year >= 1900 &&
-      this.movie.year <= 2030
-    );
-  }
-
-  hasError(fieldName: keyof Movie): boolean {
+  public hasError(fieldName: string): boolean {
     if (!this.formSubmitted) return false;
     
-    switch (fieldName) {
-      case 'title':
-        return !this.movie.title.trim();
-      case 'director':
-        return !this.movie.director.trim();
-      case 'year':
-        return !this.movie.year || this.movie.year < 1900 || this.movie.year > 2030;
-      case 'genre':
-        return !this.movie.genre || this.movie.genre === '';
-      default:
-        return false;
-    }
+    const control = this.movieForm.get(fieldName);
+    return !!(control && control.invalid && control.touched);
   }
 
-  resetForm(): void {
-    this.movie = {
-      id: 0,
+  public getErrorMessage(fieldName: string): string {
+    const control = this.movieForm.get(fieldName);
+    if (control && control.errors) {
+      const errors = control.errors;
+      if (errors['required']) return `${fieldName} is required`;
+      if (errors['invalidYear']) return 'Year must be between 1900 and 2030';
+    }
+    return '';
+  }
+
+  private resetForm(): void {
+    this.movieForm.reset({
       title: '',
       director: '',
       year: new Date().getFullYear(),
       genre: '',
       watched: false
-    };
+    });
     this.formSubmitted = false;
   }
 }
