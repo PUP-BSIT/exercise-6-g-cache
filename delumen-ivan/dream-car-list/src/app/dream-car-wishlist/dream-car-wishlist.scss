@@ -61,13 +61,11 @@
     font-weight: normal;
     cursor: pointer;
 
-    // Keep default checkboxes aligned if used elsewhere
     input[type="checkbox"] {
       width: auto;
       margin: 0;
     }
 
-    // Make radios look like square checkboxes for the fuelType group
     input[type="radio"] {
       appearance: none;
       -webkit-appearance: none;
@@ -76,7 +74,7 @@
       height: 18px;
       margin: 0;
       border: 1px solid #ccc;
-      border-radius: 3px; // square-like
+      border-radius: 3px;
       display: inline-block;
       position: relative;
       background: #fff;
@@ -138,12 +136,10 @@
       margin-top: 0;
     }
 
-    // Hide default list title when a projected title is provided
     &:has([listTitle]) {
       .default-list-title { display: none; }
     }
 
-    // Pure-CSS visibility control based on whether any car cards exist
     &:has(.car-card) {
       .empty-message {
         display: none;
@@ -161,7 +157,6 @@
     text-align: center;
     color: #666;
     padding: 20px;
-    // Hide default empty content when a projected empty is provided
     &:has([empty]) {
       .default-empty { display: none; }
     }
