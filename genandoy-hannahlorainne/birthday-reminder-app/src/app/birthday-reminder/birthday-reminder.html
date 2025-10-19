@@ -1,47 +1,45 @@
 <div class="container">
-    <h2>🎂 Birthday Reminder App</h2>
+  <h2>🎂 Birthday Reminder App</h2>
 
-<form (ngSubmit)="addBirthday()">
-    <input type="text" placeholder="Full Name" [(ngModel)]="name" name="name" required>
-    <input type="date" [(ngModel)]="birthDate" name="birthDate" required>
+  <form [formGroup]="birthdayForm" (ngSubmit)="addBirthday()">
+    <input type="text" placeholder="Full Name" formControlName="name" required />
+    <input type="date" formControlName="birthDate" required />
 
-    <select [(ngModel)]="relation" name="relation" required>
-        <option value="" disabled selected>Select Relation</option>
-      <option *ngFor="let r of relations" [value]="r">{{ r }}</option>
+    <select formControlName="relation" required>
+      <option value="" disabled selected>Select Relation</option>
+      @for (r of relations; track r) {
+        <option [value]="r">{{ r }}</option>
+      }
     </select>
 
-    <input
-      *ngIf="relation === 'Other'"
-        type="text"
-        placeholder="Enter relation"
-        [(ngModel)]="customRelation"
-        name="customRelation"
-        required
-    >
+    @if (birthdayForm.get('relation')?.value === 'Other') {
+      <input type="text" placeholder="Enter relation" formControlName="customRelation" required />
+    }
 
-    <input type="text" placeholder="Gift Idea (optional)" [(ngModel)]="giftIdea" name="giftIdea">
+    <input type="text" placeholder="Gift Idea (optional)" formControlName="giftIdea" />
 
     <label>
-        <input type="checkbox" [(ngModel)]="notify" name="notify">
-        Set reminder notification
+      <input type="checkbox" formControlName="notify" /> Set reminder notification
     </label>
 
     <button type="submit">+ Add Birthday</button>
-    </form>
+  </form>
 
-<h3>🎁 Upcoming Birthdays</h3>
+  <h3>🎁 Upcoming Birthdays</h3>
 
-  <div *ngIf="birthdayList.length === 0" class="empty-message">
-    No birthdays yet — add one above 🎈
-    </div>
-
+  @if (birthdayList.length === 0) {
+    <div class="empty-message">No birthdays yet — add one above 🎈</div>
+  } @else {
     <ul>
-    <li *ngFor="let b of birthdayList">
-        <strong>{{ b.name }}</strong>
-        <span>{{ b.relation }}</span>
-        <span>📅 {{ b.birthDate }}</span>
-      <span *ngIf="b.giftIdea">🎁 {{ b.giftIdea }}</span>
-      <span *ngIf="b.notify">🔔 Reminder ON</span>
-    </li>
+      @for (b of birthdayList; track b.name) {
+        <li>
+          <strong>{{ b.name }}</strong>
+          <span>{{ b.relation }}</span>
+          <span>📅 {{ b.birthDate }}</span>
+          @if (b.giftIdea) { <span>🎁 {{ b.giftIdea }}</span> }
+          @if (b.notify) { <span>🔔 Reminder ON</span> }
+        </li>
+      }
     </ul>
+  }
 </div>
