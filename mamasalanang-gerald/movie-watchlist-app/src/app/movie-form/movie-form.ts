@@ -1,13 +1,26 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-export interface Movie {
+export type Movie = {
   id: number;
   title: string;
   director: string;
   year: number;
   genre: string;
   watched: boolean;
+};
+
+export enum Genre {
+  ACTION = 'Action',
+  COMEDY = 'Comedy',
+  DRAMA = 'Drama',
+  HORROR = 'Horror',
+  ROMANCE = 'Romance',
+  SCI_FI = 'Sci-Fi',
+  THRILLER = 'Thriller',
+  ADVENTURE = 'Adventure',
+  ANIMATION = 'Animation',
+  DOCUMENTARY = 'Documentary'
 }
 
 @Component({
@@ -30,30 +43,15 @@ export class MovieForm {
 
   formSubmitted = false;
 
-  genres = [
-    'Action',
-    'Comedy',
-    'Drama',
-    'Horror',
-    'Romance',
-    'Sci-Fi',
-    'Thriller',
-    'Adventure',
-    'Animation',
-    'Documentary'
-  ];
+  genres: string[] = Object.values(Genre);
 
-  addMovie() {
+  addMovie(): void {
     this.formSubmitted = true;
     
-    // Check if form is valid and genre is selected (not "none")
     if (this.isFormValid()) {
-      this.movie.id = Date.now(); // Simple ID generation
+      this.movie.id = Date.now();
       this.movieAdded.emit({ ...this.movie });
       this.resetForm();
-    } else {
-      // Form is invalid, validation errors will show
-      console.log('Form validation failed - showing errors');
     }
   }
 
@@ -69,7 +67,7 @@ export class MovieForm {
     );
   }
 
-  hasError(fieldName: keyof typeof this.movie): boolean {
+  hasError(fieldName: keyof Movie): boolean {
     if (!this.formSubmitted) return false;
     
     switch (fieldName) {
@@ -86,7 +84,7 @@ export class MovieForm {
     }
   }
 
-  resetForm() {
+  resetForm(): void {
     this.movie = {
       id: 0,
       title: '',
