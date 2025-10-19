@@ -3,74 +3,69 @@
   <form [formGroup]="movieForm" (ngSubmit)="addMovie()">
     <div class="form-group">
       <label for="title">Movie Title *</label>
-      <input 
-        type="text" 
-        id="title" 
+      <input
+        type="text"
+        id="title"
         formControlName="title"
         placeholder="Enter movie title"
         class="form-control"
-        [class.error]="hasError('title')"
-      >
-      @if (hasError('title')) {
-        <div class="error-message">
-          {{ getErrorMessage('title') }}
-        </div>
-      }
+        [ngClass]="{ error: hasError('title') }"
+      />
+      <div *ngIf="hasError('title')" class="error-message">
+        {{ getErrorMessage('title') }}
+      </div>
     </div>
 
     <div class="form-group">
       <label for="director">Director *</label>
-      <input 
-        type="text" 
-        id="director" 
+      <input
+        type="text"
+        id="director"
         formControlName="director"
         placeholder="Enter director name"
         class="form-control"
-        [class.error]="hasError('director')"
-      >
-      @if (hasError('director')) {
-        <div class="error-message">
-          {{ getErrorMessage('director') }}
-        </div>
-      }
+        [ngClass]="{ error: hasError('director') }"
+      />
+      <div *ngIf="hasError('director')" class="error-message">
+        {{ getErrorMessage('director') }}
+      </div>
     </div>
 
     <div class="form-group">
       <label for="year">Release Year *</label>
-      <input 
-        type="number" 
-        id="year" 
+      <input
+        type="number"
+        id="year"
         formControlName="year"
-        min="1900" 
+        min="1900"
         max="2030"
         class="form-control"
-        [class.error]="hasError('year')"
-      >
-      @if (hasError('year')) {
-        <div class="error-message">
-          {{ getErrorMessage('year') }}
-        </div>
-      }
+        [ngClass]="{ error: hasError('year') }"
+      />
+      <div *ngIf="hasError('year')" class="error-message">
+        {{ getErrorMessage('year') }}
+      </div>
     </div>
 
     <div class="form-group">
       <label for="genre">Genre *</label>
-      <select 
-        id="genre" 
+      <select
+        id="genre"
         formControlName="genre"
         class="form-control"
-        [class.error]="hasError('genre')"
+        [ngClass]="{ error: hasError('genre') }"
       >
         <option value="">Select a genre</option>
-        @for (genre of genres; track genre) {
-          <option [value]="genre">{{ genre }}</option>
-        }
+        <option
+          *ngFor="let genre of genres; trackBy: trackByGenre"
+          [value]="genre"
+        >
+          {{ genre }}
+        </option>
       </select>
-      @if (hasError('genre')) {
-        <div class="error-message">
-          {{ getErrorMessage('genre') }}
-        </div>
-      }
+      <div *ngIf="hasError('genre')" class="error-message">
+        {{ getErrorMessage('genre') }}
+      </div>
     </div>
 
     <div class="form-group checkbox-group">

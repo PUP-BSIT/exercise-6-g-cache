@@ -1,4 +1,10 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  CommonModule,
+  NgForOf,
+  NgIf,
+  NgClass
+} from '@angular/common';
 import { 
   FormBuilder, 
   FormGroup, 
@@ -32,7 +38,13 @@ export enum Genre {
 
 @Component({
   selector: 'app-movie-form',
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    NgIf,
+    NgForOf,
+    NgClass
+  ],
   templateUrl: './movie-form.html',
   styleUrl: './movie-form.sass'
 })
@@ -96,7 +108,10 @@ export class MovieForm {
 
   public addMovie(): void {
     this.formSubmitted = true;
-    
+    if (this.movieForm.invalid) {
+      this.movieForm.markAllAsTouched();
+    }
+
     if (this.movieForm.valid) {
       const movie: Movie = {
         id: Date.now(),
@@ -113,10 +128,9 @@ export class MovieForm {
   }
 
   public hasError(fieldName: string): boolean {
-    if (!this.formSubmitted) return false;
-    
     const control = this.movieForm.get(fieldName);
-    return !!(control && control.invalid && control.touched);
+    if (!control) return false;
+    return !!(control.invalid && (control.touched || this.formSubmitted));
   }
 
   public getErrorMessage(fieldName: string): string {
@@ -140,5 +154,9 @@ export class MovieForm {
       watched: false
     });
     this.formSubmitted = false;
+  }
+
+  public trackByGenre(_index: number, genre: string): string {
+    return genre;
   }
 }

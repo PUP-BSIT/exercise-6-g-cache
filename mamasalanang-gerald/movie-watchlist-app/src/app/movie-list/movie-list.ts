@@ -1,9 +1,15 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule, NgForOf, NgIf, NgClass } from '@angular/common';
 import { Movie } from '../movie-form/movie-form';
 
 @Component({
   selector: 'app-movie-list',
-  imports: [],
+  imports: [
+    CommonModule,
+    NgIf,
+    NgForOf,
+    NgClass
+  ],
   templateUrl: './movie-list.html',
   styleUrl: './movie-list.sass'
 })

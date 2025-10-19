@@ -19,12 +19,15 @@ export class App {
   }
 
   public onMovieToggled(updatedMovie: Movie): void {
-    this.movies = this.movies.map(movie => 
-      movie.id === updatedMovie.id ? updatedMovie : movie
+    this.movies = this.movies.map(
+      (movie: Movie) =>
+        movie.id === updatedMovie.id ? updatedMovie : movie
     );
   }
 
   public onMovieRemoved(movieToRemove: Movie): void {
-    this.movies = this.movies.filter(movie => movie.id !== movieToRemove.id);
+    this.movies = this.movies.filter(
+      (movie: Movie) => movie.id !== movieToRemove.id
+    );
   }
 }
