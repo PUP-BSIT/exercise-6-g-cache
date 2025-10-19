@@ -1,0 +1,17 @@
+<div class="app-container">
+  <header class="app-header">
+    <h1>{{ title() }}</h1>
+    <p>Keep track of your favorite movies!</p>
+  </header>
+
+  <main class="app-main">
+    <app-movie-form (movieAdded)="onMovieAdded($event)"></app-movie-form>
+    <app-movie-list 
+      [movies]="movies" 
+      (movieToggled)="onMovieToggled($event)"
+      (movieRemoved)="onMovieRemoved($event)">
+    </app-movie-list>
+  </main>
+  </div>
+
+<router-outlet />

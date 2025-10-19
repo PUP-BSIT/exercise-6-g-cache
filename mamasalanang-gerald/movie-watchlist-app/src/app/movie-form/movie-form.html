@@ -1,0 +1,96 @@
+<div class="movie-form">
+  <h2>Add Movie to Watchlist</h2>
+  <form [formGroup]="movieForm" (ngSubmit)="addMovie()">
+    <div class="form-group">
+      <label for="title">Movie Title *</label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        placeholder="Enter movie title"
+        class="form-control"
+        [ngClass]="{ error: hasError('title') }"
+      />
+      @if (hasError('title')) {
+        <div class="error-message">
+          {{ getErrorMessage('title') }}
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="director">Director *</label>
+      <input
+        type="text"
+        id="director"
+        formControlName="director"
+        placeholder="Enter director name"
+        class="form-control"
+        [ngClass]="{ error: hasError('director') }"
+      />
+      @if (hasError('director')) {
+        <div class="error-message">
+          {{ getErrorMessage('director') }}
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="year">Release Year *</label>
+      <input
+        type="number"
+        id="year"
+        formControlName="year"
+        min="1900"
+        max="2030"
+        class="form-control"
+        [ngClass]="{ error: hasError('year') }"
+      />
+      @if (hasError('year')) {
+        <div class="error-message">
+          {{ getErrorMessage('year') }}
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="genre">Genre *</label>
+      <select
+        id="genre"
+        formControlName="genre"
+        class="form-control"
+        [ngClass]="{ error: hasError('genre') }"
+      >
+        <option value="">Select a genre</option>
+        @for (genre of genres; track genre) {
+          <option [value]="genre">{{ genre }}</option>
+        }
+      </select>
+      @if (hasError('genre')) {
+        <div class="error-message">
+          {{ getErrorMessage('genre') }}
+        </div>
+      }
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          formControlName="watched"
+          class="checkbox-input"
+        />
+        <span class="checkbox-text">Already watched</span>
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="add-button"
+      >
+        Add Movie
+      </button>
+    </div>
+  </form>
+</div>
