@@ -1,52 +1,53 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf, CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-interface BirthdayEntry {
+type BirthdayEntry = {
   name: string;
   birthDate: string;
   relation: string;
   giftIdea: string;
   notify: boolean;
-}
+};
 
 @Component({
   selector: 'app-birthday-reminder',
   standalone: true,
-  imports: [FormsModule, NgFor, NgIf, CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './birthday-reminder.html',
-  styleUrl: './birthday-reminder.css'
+  styleUrls: ['./birthday-reminder.css']
 })
 export class BirthdayReminderComponent {
-  name = '';
-  birthDate = '';
-  relation = '';
-  customRelation = ''; 
-  giftIdea = '';
-  notify = false;
-
-  relations: string[] = ['Friend', 'Family', 'Classmate', 'Co-worker', 'Neighbor', 'Other'];
-
+  birthdayForm: FormGroup;
+  relations = ['Friend', 'Family', 'Classmate', 'Co-worker', 'Neighbor', 'Other'];
   birthdayList: BirthdayEntry[] = [];
 
-  addBirthday() {
-    let finalRelation = this.relation === 'Other' ? this.customRelation : this.relation;
+  constructor(private fb: FormBuilder) {
+    this.birthdayForm = this.fb.group({
+      name: ['', Validators.required],
+      birthDate: ['', Validators.required],
+      relation: ['', Validators.required],
+      customRelation: [''],
+      giftIdea: [''],
+      notify: [false]
+    });
+  }
 
-    if (this.name && this.birthDate && finalRelation) {
-      this.birthdayList.push({
-        name: this.name,
-        birthDate: this.birthDate,
+  addBirthday(): void {
+    if (this.birthdayForm.valid) {
+      const { name, birthDate, relation, customRelation, giftIdea, notify } = this.birthdayForm.value;
+      const finalRelation = relation === 'Other' ? customRelation : relation;
+
+      const newBirthday: BirthdayEntry = {
+        name,
+        birthDate,
         relation: finalRelation,
-        giftIdea: this.giftIdea,
-        notify: this.notify
-      });
+        giftIdea,
+        notify
+      };
 
-      this.name = '';
-      this.birthDate = '';
-      this.relation = '';
-      this.customRelation = '';
-      this.giftIdea = '';
-      this.notify = false;
+      this.birthdayList.push(newBirthday);
+      this.birthdayForm.reset();
     }
   }
 }
