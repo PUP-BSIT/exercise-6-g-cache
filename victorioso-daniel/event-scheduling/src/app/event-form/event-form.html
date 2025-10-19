@@ -1,0 +1,52 @@
+<form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+  <h2>Event Scheduler</h2>
+  <input formControlName="eventName" type="text" placeholder="Event Name">
+  <input formControlName="eventDate" type="date">
+  <select formControlName="eventVenue">
+    <option value="" disabled selected>Select Venue</option>
+    @for (venue of venues(); track venue) {
+      <option [value]="venue">{{ venue }}</option>
+    }
+  </select>
+  <label>Start Time</label>
+  <input formControlName="eventStartTime" type="time">
+  <div>
+    <label>Required Attendees</label>
+    <div formArrayName="requiredAttendee" class="attendee-simple-row">
+      <div>
+        <span class="group-label">DIT</span>
+        @for (section of dit(); track section) {
+          <label>
+            <input
+                    type="checkbox"
+                    [formControlName]="ALL_ATTENDEES.indexOf(section)">
+            {{ section }}
+          </label>
+        }
+      </div>
+      <div>
+        <span class="group-label">BSIT</span>
+        @for (section of bsit(); track section) {
+          <label>
+            <input
+                    type="checkbox"
+                    [formControlName]="ALL_ATTENDEES.indexOf(section)">
+            {{ section }}
+          </label>
+        }
+      </div>
+      <div>
+        <span class="group-label">BSIT L</span>
+        @for (section of bsitl(); track section) {
+          <label>
+            <input
+                    type="checkbox"
+                    [formControlName]="ALL_ATTENDEES.indexOf(section)">
+            {{ section }}
+          </label>
+        }
+      </div>
+    </div>
+  </div>
+  <button type="submit">Submit</button>
+</form>

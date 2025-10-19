@@ -1,0 +1,8 @@
+<div class="app-layout">
+  <div class="form-section">
+    <app-event-form (eventCreated)="addEvent($event)"></app-event-form>
+  </div>
+  <div class="list-section">
+    <app-event-list [events]="events"></app-event-list>
+  </div>
+</div>
