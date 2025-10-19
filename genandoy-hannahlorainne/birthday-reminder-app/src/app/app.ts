@@ -5,6 +5,7 @@ import { BirthdayReminderComponent } from './birthday-reminder/birthday-reminder
   selector: 'app-root',
   standalone: true,
   imports: [BirthdayReminderComponent],
-  template: `<app-birthday-reminder></app-birthday-reminder>`
+  templateUrl: './app.html',
+  styleUrls: ['./app.css']
 })
 export class AppComponent {}
