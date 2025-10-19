@@ -10,11 +10,11 @@ import { Movie } from '../movie-form/movie-form';
 export class MovieList {
   @Input() movies: Movie[] = [];
 
-  toggleWatched(movie: Movie) {
+  toggleWatched(movie: Movie): void {
     movie.watched = !movie.watched;
   }
 
-  removeMovie(movie: Movie) {
+  removeMovie(movie: Movie): void {
     const index = this.movies.indexOf(movie);
     if (index > -1) {
       this.movies.splice(index, 1);

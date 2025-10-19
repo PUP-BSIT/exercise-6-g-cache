@@ -14,7 +14,7 @@ export class App {
   
   movies: Movie[] = [];
 
-  onMovieAdded(movie: Movie) {
+  onMovieAdded(movie: Movie): void {
     this.movies.push(movie);
   }
 }
