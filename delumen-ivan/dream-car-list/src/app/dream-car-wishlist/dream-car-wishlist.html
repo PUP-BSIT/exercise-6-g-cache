@@ -1,0 +1,115 @@
+<div class="wishlist-container">
+  <div class="form-container">
+    <ng-content select="[formTitle]"></ng-content>
+
+    <form [formGroup]="carForm" (ngSubmit)="addCar()">
+      <div class="form-group">
+        <label for="carName">Car Name:</label>
+        <input 
+          type="text" 
+          id="carName" 
+          formControlName="carName"
+          placeholder="Mustang GT">
+        @if (carForm.get('carName')?.invalid && carForm.get('carName')?.touched) {
+          <div class="error-message">
+            Please enter a valid car name (minimum 2 characters)
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="carBrand">Brand:</label>
+        <input 
+          type="text" 
+          id="carBrand" 
+          formControlName="carBrand"
+          placeholder="Ford">
+        @if (carForm.get('carBrand')?.invalid && carForm.get('carBrand')?.touched) {
+          <div class="error-message">
+            Please enter a valid brand name (minimum 2 characters)
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="carYear">Year:</label>
+        <input 
+          type="number" 
+          id="carYear" 
+          formControlName="carYear"
+          min="1900" 
+          max="2030"
+          placeholder="2001">
+        @if (carForm.get('carYear')?.invalid && carForm.get('carYear')?.touched) {
+          <div class="error-message">
+            Please enter a valid year between 1900 and 2030
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="carPrice">Price (₱):</label>
+        <input 
+          type="number" 
+          id="carPrice" 
+          formControlName="carPrice"
+          min="1" 
+          step="1000"
+          placeholder="50000">
+        @if (carForm.get('carPrice')?.invalid && carForm.get('carPrice')?.touched) {
+          <div class="error-message">
+            Please enter a valid price (minimum ₱1)
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Car Type:</label>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              id="carElectric" 
+              formControlName="carElectric"
+              (change)="onElectricChange()"> Electric </label>
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              id="carGas" 
+              formControlName="carGas"
+              (change)="onGasChange()"> Gas </label>
+        </div>
+      </div>
+
+      <button type="submit" class="add-button">ADD CAR</button>
+    </form>
+  </div>
+
+  <div class="wishlist-display">
+    <ng-content select="[listTitle]"></ng-content>
+    
+    <div class="empty-message">
+      <ng-content select="[empty]"></ng-content>
+    </div>
+    
+    <div class="cars-grid">
+      @for (car of wishlist(); track trackByCarId($index, car)) {
+        <div class="car-card">
+          <div class="car-header">
+            <h4>{{ car.name }}</h4>
+            <button 
+              class="remove-button" 
+              (click)="removeCar(car.id)"
+              title="Remove from wishlist"> X </button>
+          </div>
+          <div class="car-details">
+            <p><strong>Brand:</strong> {{ car.brand }}</p>
+            <p><strong>Year:</strong> {{ car.year }}</p>
+            <p><strong>Price:</strong> {{ formatPrice(car.price) }}</p>
+            <p><strong>Fuel Type:</strong> {{ getFuelType(car) }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
