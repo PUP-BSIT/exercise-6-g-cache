@@ -1,0 +1,107 @@
+<div class="container">
+  <h2>🎂 Birthday Reminder App</h2>
+
+  <form [formGroup]="birthdayForm" (ngSubmit)="addBirthday()">
+<<<<<<< HEAD
+    <div class="form-group">
+      <input type="text" placeholder="Full Name" formControlName="name" required />
+      @if(birthdayForm.get('name')?.invalid && birthdayForm.get('name')?.touched) {
+        <small class="error">Name is required.</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <input type="date" formControlName="birthDate" required />
+      @if(birthdayForm.get('birthDate')?.invalid && birthdayForm.get('birthDate')?.touched) {
+        <small class="error">Birthdate is required.</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <select formControlName="relation" required>
+        <option value="" disabled selected>Select Relation</option>
+        @for(r of relations; track r) {
+          <option [value]="r">{{ r }}</option>
+        }
+      </select>
+    </div>
+
+    @if(birthdayForm.get('relation')?.value === 'Other') {
+      <div class="form-group">
+        <input type="text" placeholder="Enter relation" formControlName="customRelation" />
+      </div>
+    }
+
+    <div class="form-group">
+      <input type="text" placeholder="Gift Idea (optional)" formControlName="giftIdea" />
+    </div>
+
+    <label class="checkbox">
+      <input type="checkbox" formControlName="notify" />
+      Set reminder notification
+    </label>
+
+    <div class="button-container">
+      <button type="submit" [disabled]="birthdayForm.invalid">+ Add Birthday</button>
+    </div>
+  </form>
+
+  <h3>🎁 Upcoming Birthdays</h3>
+
+  @if(birthdayList.length === 0) {
+    <div class="empty-message">No birthdays yet — add one above 🎈</div>
+  } @else {
+    <ul>
+      @for(b of birthdayList; track b.name) {
+=======
+    <input type="text" placeholder="Full Name" formControlName="name" required />
+    <input type="date" formControlName="birthDate" required />
+
+    <select formControlName="relation" required>
+      <option value="" disabled selected>Select Relation</option>
+      @for (r of relations; track r) {
+        <option [value]="r">{{ r }}</option>
+      }
+    </select>
+
+    @if (birthdayForm.get('relation')?.value === 'Other') {
+      <input type="text" placeholder="Enter relation" formControlName="customRelation" required />
+    }
+
+    <input type="text" placeholder="Gift Idea (optional)" formControlName="giftIdea" />
+
+    <label>
+      <input type="checkbox" formControlName="notify" /> Set reminder notification
+    </label>
+
+    <button type="submit">+ Add Birthday</button>
+  </form>
+
+  <h3>🎁 Upcoming Birthdays</h3>
+
+  @if (birthdayList.length === 0) {
+    <div class="empty-message">No birthdays yet — add one above 🎈</div>
+  } @else {
+    <ul>
+      @for (b of birthdayList; track b.name) {
+>>>>>>> 63cb6eec9f3b90fceaafcc0eb803d96ecbc0316f
+        <li>
+          <strong>{{ b.name }}</strong>
+          <span>{{ b.relation }}</span>
+          <span>📅 {{ b.birthDate }}</span>
+<<<<<<< HEAD
+          @if(b.giftIdea) {
+            <span>🎁 {{ b.giftIdea }}</span>
+          }
+          @if(b.notify) {
+            <span>🔔 Reminder ON</span>
+          }
+=======
+          @if (b.giftIdea) { <span>🎁 {{ b.giftIdea }}</span> }
+          @if (b.notify) { <span>🔔 Reminder ON</span> }
+>>>>>>> 63cb6eec9f3b90fceaafcc0eb803d96ecbc0316f
+        </li>
+      }
+    </ul>
+  }
+</div>
