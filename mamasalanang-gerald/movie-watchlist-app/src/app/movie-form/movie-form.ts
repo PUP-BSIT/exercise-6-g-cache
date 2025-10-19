@@ -103,7 +103,8 @@ export class MovieForm {
   public addMovie(): void {
     this.formSubmitted = true;
     if (this.movieForm.invalid) {
-      this.movieForm.markAllAsTouched();
+      // Do not mark controls as touched here. We want errors and red borders
+      // to appear only after the user attempts to submit the form (formSubmitted).
     }
 
     if (this.movieForm.valid) {
@@ -124,7 +125,9 @@ export class MovieForm {
   public hasError(fieldName: string): boolean {
     const control = this.movieForm.get(fieldName);
     if (!control) return false;
-    return !!(control.invalid && (control.touched || this.formSubmitted));
+    // Show error only if the control is invalid and the form has been submitted.
+    // This prevents showing the red border simply when a control was touched.
+    return !!(control.invalid && this.formSubmitted);
   }
 
   public getErrorMessage(fieldName: string): string {
